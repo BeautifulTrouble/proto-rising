@@ -1,0 +1,26 @@
+{
+  "name": "proto.beautifulrising.org",
+  "version": "0.0.1",
+  "authors": [
+    "Adrian Carpenter <adriatic.c@gmail.com>"
+  ],
+  "description": "Beautiful Rising toolbox early prototype",
+  "license": "MIT",
+  "homepage": "https://proto.beautifulrising.org",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "^2.8.3",
+    "bootstrap": "^3.3.4",
+    "backbone": "~1.1.2",
+    "backbone-forms": "~0.14.0",
+    "backbone.stickit": "~0.9.2",
+    "layoutmanager": "~0.9"
+  }
+}

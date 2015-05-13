@@ -1,0 +1,36 @@
+encoding: "utf-8"
+version: 0.0.1
+title: "Beautiful Rising | Toolbox early prototype"
+description: "Soliciting feedback for future development"
+
+url: "https://proto.beautifulrising.org"
+baseurl: ""
+
+markdown: kramdown
+
+exclude:
+  - README.md
+  - bower.json
+  - bower_components
+  - Gemfile
+  - Gemfile.lock
+
+assets:
+  dirname: assets
+  baseurl: /assets/
+  js_compressor: yui
+  css_compressor: yui
+  cache: true
+  sources:
+    - ui/js/
+    - ui/img/
+    - ui/css/
+    - ui/less/
+    - bower_components/modernizr/
+    - bower_components/bootstrap/dist/js/
+    - bower_components/jquery/dist/
+    - bower_components/backbone/
+    - bower_components/underscore/
+    - bower_components/layoutmanager/
+    - bower_components/backbone-forms/distribution/
+    - bower_components/backbone.stickit/
