@@ -4,8 +4,8 @@ Early prototype of the Beautiful Rising toolbox
 
 ## Requirements
 
-* bower (nodejs)
-* gem (ruby)
+* bower
+* gem
 
 ## Installation
 
