@@ -11,19 +11,19 @@ Early prototype of the Beautiful Rising toolbox
 
 1. Get the repo
 
-`git clone https://github.com/BeautifulTrouble/proto-rising.git`
-
-`cd proto-rising`
+  `git clone https://github.com/BeautifulTrouble/proto-rising.git`
+  
+  `cd proto-rising`
 
 2. Install the Ruby dependencies
 
-`gem install bundler`
-
-`bundle install --path _vendor`
+  `gem install bundler`
+  
+  `bundle install --path _vendor`
 
 3. Install the Javascript dependencies
 
-`bower install`
+  `bower install`
 
 ## Building
 
