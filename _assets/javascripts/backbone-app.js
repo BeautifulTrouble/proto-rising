@@ -13,9 +13,7 @@
 window.App = {};
 
 App.main = function() {
-    // Use sessionStorage for state because most of this state should
-    // be specific to the session and not long-term persisted.
-    App.state = JSONStorage(typeof sessionStorage !== 'undefined' ? sessionStorage : {}, 'state-');
+    App.state = JSONStorage(typeof localStorage !== 'undefined' ? localStorage : {}, 'state-');
     App.router = new App.Router();
     Backbone.history.start({
         pushState: false // TODO
