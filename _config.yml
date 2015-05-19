@@ -31,6 +31,9 @@ assets:
     - _assets/templates
     - bower_components/modernizr/
     - bower_components/bootstrap/dist/js/
+    - bower_components/bootstrap/dist/css/
+    - bower_components/bootstrap/less/
+    - bower_components/bootstrap/less/mixins/
     - bower_components/jquery/dist/
     - bower_components/backbone/
     - bower_components/underscore/

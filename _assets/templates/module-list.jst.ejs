@@ -1,2 +1,47 @@
-<h1>Module list</h1>
-<a href="/#module/example">Example</a>
+<div class="well">
+    <h4>Welcome to the Beautiful Rising Toolbox</h4>
+    <div class="row">
+        <% _.each({
+            'Tactics'       :'tactics',
+            'Principles'    :'principles',
+            'Theories'      :'theories',
+            'Case Studies'  :'case-studies',
+        }, function(value, key, list) { %>
+        <div class="col-xs-12 col-sm-6 col-lg-3">
+            <h4><%= key %></h4>
+            <h6>These spaces will hold copy when that copy is written. If it is never written it will never be displayed.</h6>
+        </div>
+        <% }); %>
+    </div>
+</div>
+
+<div class="well category-selection">
+    <h6>Browse by category</h6>
+    <div class="row">
+        <% _.each({
+            'Tactics'       :'tactics',
+            'Principles'    :'principles',
+            'Theories'      :'theories',
+            'Case Studies'  :'case-studies',
+            'All'           :'all'
+        }, function(value, key, list) { %>
+        <div class="col-xs-12 col-sm-4 col-lg-2">
+            <button class="category btn btn-block" data-category="<%= value %>"><%= key %></button>
+        </div>
+        <% }); %>
+    </div>
+</div>
+
+<div class="sorting-selection">
+    <span>Sort By</span>
+    <% _.each({
+        'Latest'    :'latest',
+        'A-Z'       :'alpha'
+    }, function(value, key, list) { %>
+    <span>
+        <a class="sorting" data-sorting="<%= value %>"><%= key %></a>
+    </span>
+    <% }); %>
+</p>
+
+<button data-route="module/sample-module">Sample Module</button>

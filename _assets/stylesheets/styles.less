@@ -1,0 +1,29 @@
+//= require bootstrap.less
+
+a {
+    cursor: pointer;
+    &.selected {
+        text-decoration: underline;
+    }
+}
+
+.sorting-selection span {
+    padding-right: 10px;
+}
+
+.well button {
+    margin-bottom: 5px;
+    &.selected {
+    }
+}
+
+// Adjust spacing inside wells
+.well div.row {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.well div[class*='col-'] {
+    padding-right: 2.5px;
+    padding-left: 2.5px;
+}
+
