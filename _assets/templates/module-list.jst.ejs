@@ -2,10 +2,10 @@
     <h4>Welcome to the Beautiful Rising Toolbox</h4>
     <div class="row">
         <% _.each({
-            'Tactics'       :'tactics',
-            'Principles'    :'principles',
-            'Theories'      :'theories',
-            'Case Studies'  :'case-studies',
+            'Tactics':      'tactics',
+            'Principles':   'principles',
+            'Theories':     'theories',
+            'Case Studies': 'case-studies'
         }, function(value, key, list) { %>
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <h4><%= key %></h4>
@@ -19,11 +19,11 @@
     <h6>Browse by category</h6>
     <div class="row">
         <% _.each({
-            'Tactics'       :'tactics',
-            'Principles'    :'principles',
-            'Theories'      :'theories',
-            'Case Studies'  :'case-studies',
-            'All'           :'all'
+            'Tactics':      'tactics',
+            'Principles':   'principles',
+            'Theories':     'theories',
+            'Case Studies': 'case-studies',
+            'All':          'all'
         }, function(value, key, list) { %>
         <div class="col-xs-12 col-sm-4 col-lg-2">
             <button class="category btn btn-block" data-category="<%= value %>"><%= key %></button>
@@ -35,8 +35,10 @@
 <div class="sorting-selection">
     <span>Sort By</span>
     <% _.each({
-        'Latest'    :'latest',
-        'A-Z'       :'alpha'
+        'Latest':   'latest',
+        'Oldest':   'oldest',
+        'A-Z':      'alpha',
+        'Z-A':      'omega'
     }, function(value, key, list) { %>
     <span>
         <a class="sorting" data-sorting="<%= value %>"><%= key %></a>

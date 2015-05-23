@@ -1,0 +1,4 @@
+{% assign type = include.type %}[{% for module in include.collection %}{
+                "type"              : "{{ type }}",
+                "title"             : "{{ module.title }}"
+            }{% if forloop.last %}{% else %},{% endif %}{% endfor %}]

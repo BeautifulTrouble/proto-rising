@@ -29,12 +29,53 @@ App.Module = Backbone.Model.extend({
 });
 
 
+// Collections
+// ===================================================================
+App.Collection = Backbone.Collection.extend({
+    // Add backward sorting to all collections
+    comparator: function(a, b) {
+        // Collections should define a sorting attribute as an optionally
+        // "-"-prefixed string name of the model attribute by which to
+        // sort. You may also use a string from the comparatorMapping.
+        var key = this.comparatorMapping[this.sorting] || this.sorting;
+        var attr = key.replace(/^-/, '');
+        if (!/^-/.test(key)) {
+            var A = a.get(attr), B = b.get(attr);
+        } else {
+            var A = b.get(attr), B = a.get(attr);
+        }
+        return A > B ? 1 : (A < B ? -1 : 0);
+    },
+    // Map normal words (for cleaner urls) to attribute sorting keys
+    comparatorMapping: {
+        'alpha':    'title',
+        'omega':    '-title',
+        'latest':   '-date',
+        'oldest':   'date'
+    },
+    constructor: function() {
+        Backbone.Collection.apply(this, arguments);
+    },
+    model: App.Module,
+    sorting: 'title'
+});
+
+App.Tactics = new App.Collection(tactics);
+App.Principles = new App.Collection(principles);
+App.Thoeries = new App.Collection(theories);
+App.CaseStudies = new App.Collection(case_studies);
+
+App.Modules = new App.Collection();
+_.each([App.Tactics, App.Principles, App.Theories, App.CaseStudies], function(collection) {
+    collection && App.Modules.add(collection.models);
+});
+
+
 // Views
 // ===================================================================
 App.View = Backbone.View.extend({
-    // Extend the standard view with useful things
+    // Add some common event handlers to all views
     constructor: function() {
-        // Add some common event handlers to all views
         this.events = _.extend({
             // Handle <button data-route="about/authors">Authors</button>
             'click button': function(ev) {
@@ -42,22 +83,19 @@ App.View = Backbone.View.extend({
                 route && App.router.navigate(route, {trigger: true});
             }
         }, this.events || {});
-
-        // Button group handling
-        this.groupSelect = function(groupSelector, selectedClass, activeElement) {
-            // groupSelector: selector that will capture each item in the group
-            // selectedClass: class(es) which the selected item should have
-            // activeElement: selector or $el to be assigned selected class(es)
-            this.$(groupSelector).removeClass(selectedClass); 
-            this.$(activeElement).addClass(selectedClass);
-        };
-
-        // Get element with matching data attribute
-        this.dataEl = function(key, value) {
-            return this.$('[data-' + key + '="' + value + '"]')
-        };
-
         Backbone.View.apply(this, arguments);
+    },
+    // Get element with matching data attribute
+    dataEl: function(key, value) {
+        return this.$('[data-' + key + '="' + value + '"]')
+    },
+    // Button group handling
+    groupSelect: function(groupSelector, selectedClass, activeElement) {
+        // groupSelector: selector that will capture each item in the group
+        // selectedClass: class(es) which the selected item should have
+        // activeElement: selector or $el to be assigned selected class(es)
+        this.$(groupSelector).removeClass(selectedClass); 
+        this.$(activeElement).addClass(selectedClass);
     }
 });
 
