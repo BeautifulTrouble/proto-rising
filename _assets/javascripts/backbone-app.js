@@ -51,11 +51,8 @@ App.Collection = Backbone.Collection.extend({
     comparatorMapping: {
         'alpha':    'title',
         'omega':    '-title',
-        'newest':   '-date',
-        'oldest':   'date'
-    },
-    constructor: function() {
-        Backbone.Collection.apply(this, arguments);
+        'newest':   '-timestamp',
+        'oldest':   'timestamp'
     },
     model: App.Module,
     sorting: 'title'
@@ -78,11 +75,7 @@ App.View = Backbone.View.extend({
     // Add some common event handlers to all views
     constructor: function() {
         this.events = _.extend({
-            // Handle <button data-route="about/authors">Authors</button>
-            'click button': function(ev) {
-                var route = ev.target.dataset.route;
-                route && App.router.navigate(route, {trigger: true});
-            }
+            'click button': 'navigateToRoute',
         }, this.events || {});
         Backbone.View.apply(this, arguments);
     },
@@ -97,6 +90,11 @@ App.View = Backbone.View.extend({
         // activeElement: selector or $el to be assigned selected class(es)
         this.$(groupSelector).removeClass(selectedClass); 
         this.$(activeElement).addClass(selectedClass);
+    },
+    // Handle <button data-route="about/authors">Authors</button>
+    navigateToRoute: function(ev) {
+        var route = ev.target.dataset.route;
+        route && App.router.navigate(route, {trigger: true});
     }
 });
 
@@ -114,8 +112,11 @@ App.ModuleListView = App.View.extend({
         this.category = App.state('category');
         this.sorting = App.state('sorting');
 
-        // Make sure the array returned by App.modules.where is an App.collection
-        this.collection = new App.Collection(App.modules.where({'type': this.category}));
+        this.collection = App.modules;
+        if (this.category != 'all') {
+            // Make sure the array returned by where is an App.collection
+            this.collection = new App.Collection(this.collection.where({'type': this.category}));
+        }
         this.collection.sorting = this.sorting;
         this.collection.sort();
         this.collection.each(function(module) {
@@ -136,7 +137,11 @@ App.ModuleListView = App.View.extend({
         'click .sorting': function(ev) {
             App.state('sorting', ev.target.dataset.sorting);
             this.render();
-        }
+        },
+        'click #modules-list h3': 'navigateToRoute'
+    },
+    initialize: function() {
+        this.listenTo(App.modules, 'add remove change', this.render);
     }
 });
 
