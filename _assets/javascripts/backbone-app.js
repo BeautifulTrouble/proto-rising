@@ -58,13 +58,13 @@ App.Collection = Backbone.Collection.extend({
     sorting: 'title'
 });
 
-App.Tactics = new App.Collection(tactics);
-App.Principles = new App.Collection(principles);
-App.Thoeries = new App.Collection(theories);
-App.CaseStudies = new App.Collection(case_studies);
-
 App.modules = new App.Collection();
-_.each([App.Tactics, App.Principles, App.Theories, App.CaseStudies], function(collection) {
+_.each([
+        new App.Collection(tactics),
+        new App.Collection(principles),
+        new App.Collection(theories),
+        new App.Collection(case_studies)
+    ], function(collection) {
     collection && App.modules.add(collection.models);
 });
 
@@ -111,7 +111,6 @@ App.ModuleListView = App.View.extend({
     beforeRender: function() {
         this.category = App.state('category');
         this.sorting = App.state('sorting');
-
         this.collection = App.modules;
         if (this.category != 'all') {
             // Make sure the array returned by where is an App.collection
@@ -122,8 +121,7 @@ App.ModuleListView = App.View.extend({
         this.collection.each(function(module) {
             this.insertView('#modules-list', new App.ModuleListItemView({model: module}));
         }, this);
-
-        App.router.navigate('category/' + this.category + '/' + this.sorting);    // Not triggering the route
+        App.router.navigate('category/' + this.category + '/' + this.sorting);
     },
     afterRender: function() {
         this.groupSelect('.category', 'selected btn-info', this.dataEl('category', this.category));
@@ -178,8 +176,6 @@ Backbone.Layout.configure({
     renderView: function(view, options, nestedViews) {
         view = new view(options || {});
         this.setView(this.renderViewEl, view);
-        // TODO: Allow passing a mapping of nested views to
-        //       be inserted with this.insertViews ???
         this.render();
     }
 });
