@@ -6,6 +6,7 @@
 //= require header
 //= require footer
 //= require module-list
+//= require module-list-item
 //= require module-detail
 
 // Main
@@ -50,7 +51,7 @@ App.Collection = Backbone.Collection.extend({
     comparatorMapping: {
         'alpha':    'title',
         'omega':    '-title',
-        'latest':   '-date',
+        'newest':   '-date',
         'oldest':   'date'
     },
     constructor: function() {
@@ -65,9 +66,9 @@ App.Principles = new App.Collection(principles);
 App.Thoeries = new App.Collection(theories);
 App.CaseStudies = new App.Collection(case_studies);
 
-App.Modules = new App.Collection();
+App.modules = new App.Collection();
 _.each([App.Tactics, App.Principles, App.Theories, App.CaseStudies], function(collection) {
-    collection && App.Modules.add(collection.models);
+    collection && App.modules.add(collection.models);
 });
 
 
@@ -109,12 +110,23 @@ App.FooterView = App.View.extend({
 
 App.ModuleListView = App.View.extend({
     template: "module-list",
+    beforeRender: function() {
+        this.category = App.state('category');
+        this.sorting = App.state('sorting');
+
+        // Make sure the array returned by App.modules.where is an App.collection
+        this.collection = new App.Collection(App.modules.where({'type': this.category}));
+        this.collection.sorting = this.sorting;
+        this.collection.sort();
+        this.collection.each(function(module) {
+            this.insertView('#modules-list', new App.ModuleListItemView({model: module}));
+        }, this);
+
+        App.router.navigate('category/' + this.category + '/' + this.sorting);    // Not triggering the route
+    },
     afterRender: function() {
-        var category = App.state('category');
-        var sorting = App.state('sorting');
-        this.groupSelect('.category', 'selected btn-info', this.dataEl('category', category));
-        this.groupSelect('.sorting', 'selected', this.dataEl('sorting', sorting));
-        App.router.navigate('category/' + category + '/' + sorting);    // Not triggering the route
+        this.groupSelect('.category', 'selected btn-info', this.dataEl('category', this.category));
+        this.groupSelect('.sorting', 'selected', this.dataEl('sorting', this.sorting));
     },
     events: {
         'click .category': function(ev) {
@@ -126,6 +138,10 @@ App.ModuleListView = App.View.extend({
             this.render();
         }
     }
+});
+
+App.ModuleListItemView = App.View.extend({
+    template: "module-list-item",
 });
 
 App.ModuleDetailView = App.View.extend({
@@ -154,10 +170,11 @@ Backbone.Layout.configure({
     },
     // Shortcut for instantiating and rendering views
     renderViewEl: '#content',
-    renderView: function(view, options) {
+    renderView: function(view, options, nestedViews) {
         view = new view(options || {});
         this.setView(this.renderViewEl, view);
-        // TODO: Allow passing a mapping of nested views
+        // TODO: Allow passing a mapping of nested views to
+        //       be inserted with this.insertViews ???
         this.render();
     }
 });

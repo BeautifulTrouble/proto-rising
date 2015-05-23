@@ -2,10 +2,10 @@
     <h4>Welcome to the Beautiful Rising Toolbox</h4>
     <div class="row">
         <% _.each({
-            'Tactics':      'tactics',
-            'Principles':   'principles',
-            'Theories':     'theories',
-            'Case Studies': 'case-studies'
+            'Tactics':      'tactic',
+            'Principles':   'principle',
+            'Theories':     'theory',
+            'Case Studies': 'case-study'
         }, function(value, key, list) { %>
         <div class="col-xs-12 col-sm-6 col-lg-3">
             <h4><%= key %></h4>
@@ -19,10 +19,10 @@
     <h6>Browse by category</h6>
     <div class="row">
         <% _.each({
-            'Tactics':      'tactics',
-            'Principles':   'principles',
-            'Theories':     'theories',
-            'Case Studies': 'case-studies',
+            'Tactics':      'tactic',
+            'Principles':   'principle',
+            'Theories':     'theory',
+            'Case Studies': 'case-study',
             'All':          'all'
         }, function(value, key, list) { %>
         <div class="col-xs-12 col-sm-4 col-lg-2">
@@ -35,7 +35,7 @@
 <div class="sorting-selection">
     <span>Sort By</span>
     <% _.each({
-        'Latest':   'latest',
+        'Newest':   'newest',
         'Oldest':   'oldest',
         'A-Z':      'alpha',
         'Z-A':      'omega'
@@ -45,5 +45,7 @@
     </span>
     <% }); %>
 </p>
+
+<section id="modules-list"></section>
 
 <button data-route="module/sample-module">Sample Module</button>
