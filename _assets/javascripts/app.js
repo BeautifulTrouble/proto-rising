@@ -50,6 +50,12 @@ var JSONStorage = function(store, prefix) {
     };
 };
 
+var getter = function(name, fallbackValue) {
+    // Get model property, falling back to an empty string or specified value
+    var attr = this.model.attributes[name];
+    return attr ? attr : (fallbackValue || '');
+};
+
 
 // "Footer scripts"
 // ===================================================================

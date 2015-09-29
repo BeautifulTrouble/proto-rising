@@ -25,15 +25,13 @@ App.main = function() {
 // Models
 // ===================================================================
 App.Module = Backbone.Model.extend({
-    initialize: function() {
-    }
 });
 
 
 // Collections
 // ===================================================================
+// Extend the standard collection with better sorting
 App.Collection = Backbone.Collection.extend({
-    // Add backward sorting to all collections
     comparator: function(a, b) {
         // Collections should define a sorting attribute as an optionally
         // "-"-prefixed string name of the model attribute by which to
@@ -58,17 +56,22 @@ App.Collection = Backbone.Collection.extend({
     sorting: 'title'
 });
 
-
 App.modules = new App.Collection();
-_.each(['authors', 'bigideas', 'practitioners', 'principles', 'resources', 'stories', 'tactics'],
-    function(name) {
-        var moduleType = new App.Collection();
-        moduleType.url = '/api/' + name;
-        moduleType.fetch({
-            success: function() { App.modules.add(moduleType.models); }
+
+// Use config data to add all the content types
+(new (Backbone.Collection.extend({url: '/api/config'}))).fetch({
+    success: function(collection) { 
+        // Get the simple object from the collection
+        App.config = collection.models[0].attributes; 
+        _.each(_.keys(App.config.doc_types), function(name) {
+            var moduleType = new App.Collection();
+            moduleType.url = '/api/' + name;
+            moduleType.fetch({
+                success: function() { App.modules.add(moduleType.models); }
+            });
         });
     }
-);
+});
 
 
 // Views
@@ -117,8 +120,6 @@ App.ModuleListView = App.View.extend({
         if (this.category != 'all') {
             // Make sure the array returned by where is an App.collection
             this.collection = new App.Collection(this.collection.where({'type': this.category}));
-            console.log(this.collection);
-            console.log(this.category);
         }
         this.collection.sorting = this.sorting;
         this.collection.sort();
@@ -149,17 +150,27 @@ App.ModuleListView = App.View.extend({
 
 App.ModuleListItemView = App.View.extend({
     template: "module-list-item",
+    serialize: function() {
+        return _.extend(this.model.attributes, {
+            config: App.config,
+            get: _.bind(getter, this)
+        });
+    }
 });
 
 App.ModuleDetailView = App.View.extend({
     template: "module-detail",
-    initialize: function(options) {
+    beforeRender: function() {
+        this.model = _.first(App.modules.where({slug: App.state('slug')})) || {};
     },
     serialize: function() {
-        return {
-        };
+        return _.extend(this.model.attributes, {
+            config: App.config,
+            get: _.bind(getter, this)
+        });
     },
-    events: {
+    initialize: function() {
+        this.listenTo(App.modules, 'add remove change', this.render);
     }
 });
 
@@ -202,6 +213,7 @@ App.Router = Backbone.Router.extend({
         '*default': 'default'
     },
     displayModule: function(slug) {
+        App.state('slug', slug);
         App.layout.renderView(App.ModuleDetailView);
     },
     displayList: function(category, sorting) {
