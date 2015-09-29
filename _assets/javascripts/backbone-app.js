@@ -58,15 +58,17 @@ App.Collection = Backbone.Collection.extend({
     sorting: 'title'
 });
 
+
 App.modules = new App.Collection();
-_.each([
-        new App.Collection(tactics),
-        new App.Collection(principles),
-        new App.Collection(theories),
-        new App.Collection(case_studies)
-    ], function(collection) {
-    collection && App.modules.add(collection.models);
-});
+_.each(['authors', 'bigideas', 'practitioners', 'principles', 'resources', 'stories', 'tactics'],
+    function(name) {
+        var moduleType = new App.Collection();
+        moduleType.url = '/api/' + name;
+        moduleType.fetch({
+            success: function() { App.modules.add(moduleType.models); }
+        });
+    }
+);
 
 
 // Views
@@ -115,6 +117,8 @@ App.ModuleListView = App.View.extend({
         if (this.category != 'all') {
             // Make sure the array returned by where is an App.collection
             this.collection = new App.Collection(this.collection.where({'type': this.category}));
+            console.log(this.collection);
+            console.log(this.category);
         }
         this.collection.sorting = this.sorting;
         this.collection.sort();

@@ -1,5 +1,0 @@
-{% assign type = include.type %}[{% for module in include.collection %}{
-                "type"              : "{{ type }}",
-                "title"             : "{{ module.title }}",
-                "timestamp"         : {% if module.timestamp %}{{ module.timestamp }}{% else %}0{% endif %}
-            }{% if forloop.last %}{% else %},{% endif %}{% endfor %}]
