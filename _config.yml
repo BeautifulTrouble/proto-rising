@@ -1,5 +1,5 @@
 encoding: "utf-8"
-version: 0.0.1
+version: 0.0.5
 title: "Beautiful Rising | Toolbox early prototype"
 description: "Soliciting feedback for future development"
 
@@ -12,12 +12,6 @@ url: "https://proto.beautifulrising.org"
 baseurl: ""
 
 markdown: kramdown
-
-collections:
-  - tactics
-  - principles
-  - theories
-  - case_studies
 
 exclude:
   - README.md
