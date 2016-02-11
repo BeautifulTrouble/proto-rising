@@ -1,3 +1,8 @@
 <h2><%= title %></h2>
-<p><%= get('short_write_up') %></p>
+<h3>
+<% _.each(get('authors'), function(value, key, list) { %>
+<%= value.name %><br>
+<% }); %>
+</h3>
+<p><%= get('short-write-up') %></p>
 <a href="/#">Index</a>
