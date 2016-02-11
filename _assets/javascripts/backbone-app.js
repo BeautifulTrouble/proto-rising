@@ -14,6 +14,9 @@
 window.App = {};
 
 App.main = function() {
+    // Wait for the App.ready flag
+    if (!App.ready) 
+        return setTimeout(App.main, 100);
     App.state = JSONStorage(typeof localStorage !== 'undefined' ? localStorage : {}, 'state-');
     App.router = new App.Router();
     Backbone.history.start({
@@ -30,7 +33,7 @@ App.Module = Backbone.Model.extend({
 
 // Collections
 // ===================================================================
-// Extend the standard collection with better sorting
+// Use App.Collection over Backbone.Collection for added functionality
 App.Collection = Backbone.Collection.extend({
     comparator: function(a, b) {
         // Collections should define a sorting attribute as an optionally
@@ -56,26 +59,29 @@ App.Collection = Backbone.Collection.extend({
     sorting: 'title'
 });
 
+App.apiPrefix = 'https://api.beautifulrising.org/api/v1/';
 App.modules = new App.Collection();
 
 // Use config data to add all the content types
-(new (Backbone.Collection.extend({url: '/api/config'}))).fetch({
+(new (Backbone.Collection.extend({url: App.apiPrefix + 'config'}))).fetch({
     success: function(collection) { 
         // Get the simple object from the collection
         App.config = collection.models[0].attributes; 
-        _.each(_.keys(App.config.doc_types), function(name) {
+        _.each(App.config['module-types'], function(type) {
             var moduleType = new App.Collection();
-            moduleType.url = '/api/' + name;
+            moduleType.url = App.apiPrefix + type['many']
             moduleType.fetch({
                 success: function() { App.modules.add(moduleType.models); }
             });
         });
+        App.ready = true;
     }
 });
 
 
 // Views
 // ===================================================================
+// Use App.View over Backbone.View for added functionality
 App.View = Backbone.View.extend({
     // Add some common event handlers to all views
     constructor: function() {
@@ -96,7 +102,7 @@ App.View = Backbone.View.extend({
         this.$(groupSelector).removeClass(selectedClass); 
         this.$(activeElement).addClass(selectedClass);
     },
-    // Handle <button data-route="about/authors">Authors</button>
+    // Automatically handle this: <button data-route="about/authors">Authors</button>
     navigateToRoute: function(ev) {
         var route = ev.target.dataset.route;
         route && App.router.navigate(route, {trigger: true});
@@ -152,7 +158,6 @@ App.ModuleListItemView = App.View.extend({
     template: "module-list-item",
     serialize: function() {
         return _.extend(this.model.attributes, {
-            config: App.config,
             get: _.bind(getter, this)
         });
     }
@@ -165,7 +170,6 @@ App.ModuleDetailView = App.View.extend({
     },
     serialize: function() {
         return _.extend(this.model.attributes, {
-            config: App.config,
             get: _.bind(getter, this)
         });
     },

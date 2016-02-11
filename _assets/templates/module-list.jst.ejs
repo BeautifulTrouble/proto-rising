@@ -1,14 +1,9 @@
 <div class="well">
     <h4>Welcome to the Beautiful Rising Toolbox</h4>
     <div class="row">
-        <% _.each({
-            'Tactics':      'tactic',
-            'Principles':   'principle',
-            'Big Ideas':    'bigidea',
-            'Stories':      'story'
-        }, function(value, key, list) { %>
+        <% _.each(App.config['module-types'], function(value, key, list) { %>
         <div class="col-xs-12 col-sm-6 col-lg-3">
-            <h4><%= key %></h4>
+            <h4><%= capitalize(value.name) %></h4>
             <h6>These spaces will hold copy when that copy is written. If it is never written it will never be displayed.</h6>
         </div>
         <% }); %>
@@ -18,17 +13,14 @@
 <div class="well category-selection">
     <h6>Browse by category</h6>
     <div class="row">
-        <% _.each({
-            'Tactics':      'tactic',
-            'Principles':   'principle',
-            'Big Ideas':    'bigidea',
-            'Stories':      'story',
-            'All':          'all'
-        }, function(value, key, list) { %>
+        <% _.each(App.config['module-types'], function(value, key, list) { %>
         <div class="col-xs-12 col-sm-4 col-lg-2">
-            <button class="category btn btn-block" data-category="<%= value %>"><%= key %></button>
+            <button class="category btn btn-block" data-category="<%= value.one %>"><%= capitalize(value.many) %></button>
         </div>
         <% }); %>
+        <div class="col-xs-12 col-sm-4 col-lg-2">
+            <button class="category btn btn-block" data-category="all">All</button>
+        </div>
     </div>
 </div>
 
